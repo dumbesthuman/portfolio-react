@@ -3,11 +3,20 @@ import { projects } from '../data';
 
 function ProjectItem({ project, index }) {
   const [hovered, setHovered] = useState(false);
+  const isHashLink = !project.link || project.link === '#';
+  const isExternalLink = project.link && /^https?:\/\//.test(project.link);
 
   return (
     <a
-      href={project.link}
+      href={isHashLink ? undefined : project.link}
+      target={isExternalLink ? '_blank' : undefined}
+      rel={isExternalLink ? 'noopener noreferrer' : undefined}
       className="project-item group block border-t border-border last:border-b py-6 md:py-8 cursor-none reveal"
+      onClick={e => {
+        if (isHashLink) {
+          e.preventDefault();
+        }
+      }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       data-hover
