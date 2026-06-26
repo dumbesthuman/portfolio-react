@@ -42,7 +42,7 @@ export default function Loader({ onComplete }) {
     >
       {/* Top: logo */}
       <div className="flex items-center justify-between">
-        <span className="font-display font-bold text-xl acid-text">RH</span>
+        <span className="font-display font-bold text-xl acid-text">RTSH</span>
         <span className="section-label text-mist/40">Loading</span>
       </div>
 
