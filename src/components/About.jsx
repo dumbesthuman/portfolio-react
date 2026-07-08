@@ -15,11 +15,19 @@ export default function About() {
             <span className="gradient-text">without limits.</span>
           </h2>
 
-          {/* Portrait placeholder with ASCII art feel */}
-          <div className="reveal mt-10 relative w-48 h-48 border border-border group">
-            
+          {/* Portrait Image with animated offset border */}
+          <div className="reveal mt-10 relative w-48 h-48 group">
+            {/* The offset border behind the image */}
             <div className="absolute -bottom-3 -right-3 w-full h-full border border-acid/30 transition-all duration-300 group-hover:-bottom-5 group-hover:-right-5" />
-           
+            
+            {/* Image container with overflow hidden so zoom doesn't spill */}
+            <div className="relative w-full h-full border border-border overflow-hidden bg-dim">
+              <img 
+                src="/profile.jpg" 
+                alt="Ritesh Hiremath" 
+                className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 filter contrast-105"
+              />
+            </div>
           </div>
         </div>
 

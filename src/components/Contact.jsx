@@ -78,7 +78,7 @@ export default function Contact() {
       {/* Footer */}
       <div className="max-w-7xl mx-auto px-6 mt-20 pt-8 border-t border-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <span className="font-mono text-xs text-mist/40">
-          © 2025 Ritesh Hiremath — Built with React 
+          © 2026 Ritesh Hiremath — Built with React
         </span>
         <span className="font-mono text-xs text-mist/40">
           Designed & Developed by me ✦

@@ -30,7 +30,7 @@ export default function Hero() {
         {/* Overline */}
         <div className="slide-up slide-up-1 mb-6">
           <span className="font-mono text-xs text-acid tracking-widest uppercase">
-            ∞ Portfolio 2025
+            ∞ Portfolio 2026
           </span>
         </div>
 
