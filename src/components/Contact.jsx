@@ -2,7 +2,7 @@ const socials = [
   { label: 'GitHub', handle: '@dumbesthuman', href: 'https://github.com/dumbesthuman' },
   { label: 'LinkedIn', handle: 'Ritesh Hiremath', href: 'https://linkedin.com/in/ritesh-hiremath-715074387' },
   { label: 'Twitter/X', handle: '@riteshrhiremath', href: 'https://twitter.com/riteshrhiremath' },
-  { label: 'Email', handle: 'riteshhiremath@gmail.com', href: 'mailto:riteshhiremath2004@gmail.com' },
+  { label: 'Email', handle: 'riteshhiremath2004@gmail.com', href: 'mailto:riteshhiremath2004@gmail.com' },
 ];
 
 export default function Contact() {

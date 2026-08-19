@@ -1,168 +1,127 @@
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useState } from 'react';
 import { projects } from '../data';
 
-gsap.registerPlugin(ScrollTrigger);
-
-function ProjectCard({ project }) {
+function ProjectItem({ project }) {
+  const [hovered, setHovered] = useState(false);
   const isHashLink = !project.link || project.link === '#';
   const isExternalLink = project.link && /^https?:\/\//.test(project.link);
 
   return (
-    <article 
-      className="panel-card flex-shrink-0 w-[310px] sm:w-[355px] md:w-[460px] h-[430px] md:h-[490px] border border-border bg-dim p-6 md:p-10 flex flex-col justify-between relative group transition-all duration-300 hover:border-paper/30"
-      style={{
-        boxShadow: 'none',
-        transform: 'none',
+    <a
+      href={isHashLink ? undefined : project.link}
+      target={isExternalLink ? '_blank' : undefined}
+      rel={isExternalLink ? 'noopener noreferrer' : undefined}
+      className="project-item group block border-t border-border last:border-b py-6 md:py-8 cursor-none reveal"
+      onClick={(e) => {
+        if (isHashLink) {
+          e.preventDefault();
+        }
       }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = `8px 8px 0px ${project.color}`;
-        e.currentTarget.style.transform = 'translate(-4px, -4px)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow = 'none';
-        e.currentTarget.style.transform = 'none';
-      }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      data-hover
     >
-      {/* Top row: Category + Year */}
-      <div className="flex justify-between items-center text-[10px] md:text-xs font-mono text-mist/60">
-        <span>{project.category}</span>
-        <span>{project.year}</span>
-      </div>
+      <div className="grid grid-cols-12 items-center gap-4">
+        <div className="col-span-1 hidden md:block">
+          <span className="font-mono text-xs text-mist/40">{project.id}</span>
+        </div>
 
-      {/* Main Content */}
-      <div className="mt-6 md:mt-8 flex-grow flex flex-col justify-start">
-        {/* Project Number */}
-        <span className="font-mono text-xs md:text-sm mb-2 block" style={{ color: project.color }}>
-          // {project.id}
-        </span>
-        
-        {/* Title */}
-        <h3 className="font-display font-black text-2xl md:text-3xl text-paper transition-all duration-300 mb-3 md:mb-4 group-hover:text-opacity-100">
-          {project.title}
-        </h3>
+        <div className="col-span-12 md:col-span-5">
+          <div className="flex items-start gap-4">
+            <div>
+              <h3
+                className="font-display font-bold text-2xl md:text-3xl text-[#e6dcc6] transition-colors duration-300"
+                style={{ color: hovered ? project.color : undefined }}
+              >
+                {project.title}
+              </h3>
+              <p className="text-[#bfb59d] text-sm mt-1 font-mono">{project.tagline}</p>
+            </div>
+          </div>
 
-        {/* Tagline */}
-        <p className="text-xs md:text-sm font-mono mb-3 text-paper/70 font-semibold leading-relaxed">
-          {project.tagline}
-        </p>
+          <div
+            className="overflow-hidden transition-all duration-500"
+            style={{ maxHeight: hovered ? '100px' : '0px' }}
+          >
+            <p className="text-[#c9bfa6] text-sm mt-3 leading-relaxed pr-4">
+              {project.description}
+            </p>
+          </div>
+        </div>
 
-        {/* Description */}
-        <p className="text-xs md:text-sm text-mist/80 leading-relaxed font-body">
-          {project.description}
-        </p>
-      </div>
+        <div className="col-span-6 md:col-span-2 hidden md:block">
+          <span className="section-label text-mist/50">{project.category}</span>
+        </div>
 
-      {/* Bottom: Tech stack + links */}
-      <div className="mt-auto space-y-4 md:space-y-6">
-        {/* Tech tags */}
-        <div className="flex flex-wrap gap-1.5 md:gap-2">
-          {project.tech.map(t => (
+        <div className="col-span-12 md:col-span-3 flex flex-wrap gap-1.5">
+          {project.tech.map((t) => (
             <span
               key={t}
-              className="font-mono text-[9px] md:text-xs border border-border/80 px-2 py-0.5 md:px-2.5 md:py-1 text-mist transition-all duration-300 group-hover:border-paper/20"
+              className="font-mono text-xs border border-border/50 px-2 py-1 text-mist/60 transition-all duration-300"
+              style={{ borderColor: hovered ? `${project.color}40` : undefined, color: hovered ? project.color : undefined }}
             >
               {t}
             </span>
           ))}
         </div>
 
-        {/* Action Link */}
-        <div className="flex justify-between items-center pt-3 border-t border-border/30">
-          <span className="font-mono text-[10px] md:text-xs uppercase tracking-wider text-mist group-hover:text-paper transition-colors duration-300">
-            {project.status}
+        <div className="col-span-1 hidden md:flex justify-end">
+          <span
+            className="text-mist transition-all duration-300 text-lg"
+            style={{ color: hovered ? project.color : undefined, transform: hovered ? 'translate(4px, -4px)' : 'none' }}
+          >
+            ↗
           </span>
-          {!isHashLink && (
-            <a
-              href={project.link}
-              target={isExternalLink ? '_blank' : undefined}
-              rel={isExternalLink ? 'noopener noreferrer' : undefined}
-              className="w-8 h-8 md:w-10 md:h-10 rounded-full border border-border flex items-center justify-center text-paper group-hover:border-paper group-hover:bg-paper group-hover:text-ink transition-all duration-300 text-sm md:text-base font-bold"
-              data-hover
-            >
-              ↗
-            </a>
-          )}
         </div>
       </div>
-    </article>
+
+      <div
+        className="project-line h-px mt-4 md:mt-0 transition-all duration-500"
+        style={{ background: project.color, opacity: hovered ? 0.6 : 0 }}
+      />
+    </a>
   );
 }
 
 export default function Projects() {
-  const sectionRef = useRef(null);
-  const triggerRef = useRef(null);
-
-  useEffect(() => {
-    let ctx = gsap.context(() => {
-      const mm = gsap.matchMedia();
-      
-      mm.add('(min-width: 768px)', () => {
-        const getDist = () => triggerRef.current.scrollWidth - window.innerWidth;
-        
-        gsap.to(triggerRef.current, {
-          x: () => -getDist(),
-          ease: 'none',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top top',
-            end: () => `+=${getDist()}`,
-            pin: true,
-            scrub: 0.8,
-            invalidateOnRefresh: true,
-            anticipatePin: 1,
-          },
-        });
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section 
-      ref={sectionRef} 
-      id="projects" 
-      className="relative md:h-screen bg-dim flex flex-col justify-center py-16 md:py-0 overflow-hidden"
-    >
-      <div className="w-full flex flex-col gap-8 md:gap-10">
-        {/* Header */}
-        <div className="w-full px-6 md:px-16 flex flex-col md:flex-row md:items-end justify-between gap-4">
+    <section id="projects" className="py-32 bg-dim">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div>
-            <div className="reveal mb-2">
+            <div className="reveal mb-3">
               <span className="section-label text-acid">// 02 — Work</span>
             </div>
             <h2
-              className="reveal font-display font-extrabold text-paper leading-none"
-              style={{ fontSize: 'clamp(32px, 4.5vw, 56px)' }}
+              className="reveal font-display font-extrabold text-[#e6dcc6] leading-tight"
+              style={{ fontSize: 'clamp(36px, 5vw, 64px)' }}
             >
-              Selected <span className="gradient-text">Projects.</span>
+              Selected
+              <br />
+              <span className="gradient-text">Projects.</span>
             </h2>
           </div>
           <div className="reveal">
-            <p className="text-mist text-xs md:text-sm max-w-sm font-body leading-relaxed">
-              A collection of digital tools, hardware, and AI/web applications. 
-              Drag or scroll to explore them sideways.
+            <p className="text-[#bfb59d] text-sm max-w-xs font-body leading-relaxed">
+              A mix of web, hardware, and game projects.
+              Each one taught me something new.
             </p>
+            <a
+              href="https://leetcode.com/u/riteshhiremath2004/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex items-center gap-2 rounded-full border border-[#c8f135]/60 bg-[#c8f135]/10 px-3.5 py-2 text-sm font-mono font-semibold text-[#c8f135] shadow-[0_0_0_1px_rgba(200,241,53,0.15)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#c8f135]/20 hover:shadow-[0_0_20px_rgba(200,241,53,0.2)]"
+            >
+              <span>⚡ LeetCode</span>
+              <span>↗</span>
+            </a>
           </div>
         </div>
 
-        {/* Scrollable Track */}
-        <div className="w-full overflow-x-auto md:overflow-x-visible scrollbar-none" style={{ scrollbarWidth: 'none' }}>
-          <div 
-            ref={triggerRef}
-            className="flex flex-row gap-6 md:gap-8 pb-6 md:pb-0 w-max px-6 md:px-16"
-          >
-            {projects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
-            ))}
-          </div>
-        </div>
-
-        {/* Hint for mobile */}
-        <div className="md:hidden text-center text-[10px] font-mono text-mist/60 mt-1">
-          Swipe left/right to view projects
+        <div className="stagger-parent">
+          {projects.map((project) => (
+            <ProjectItem key={project.id} project={project} />
+          ))}
         </div>
       </div>
     </section>

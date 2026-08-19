@@ -8,7 +8,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex flex-col justify-center overflow-hidden grid-bg"
+      className="hero-hover-area relative min-h-screen flex flex-col justify-center overflow-hidden grid-bg"
     >
       {/* Ambient blobs */}
       <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-acid/4 blur-[120px] blob pointer-events-none" />
@@ -38,13 +38,13 @@ export default function Hero() {
         <div className="overflow-hidden mb-2">
           <h1 className="slide-up slide-up-2 font-display font-extrabold leading-[0.92] tracking-tight"
             style={{ fontSize: 'clamp(56px, 11vw, 160px)' }}>
-            <span className="text-paper">Ritesh</span>
+            <span className="hero-name text-paper">Ritesh</span>
           </h1>
         </div>
         <div className="overflow-hidden mb-2">
           <h1 className="slide-up slide-up-3 font-display font-extrabold leading-[0.92] tracking-tight"
             style={{ fontSize: 'clamp(56px, 11vw, 160px)' }}>
-            <span className="acid-text">Hiremath.</span>
+            <span className="hero-name acid-text">Hiremath.</span>
           </h1>
         </div>
 
@@ -64,7 +64,13 @@ export default function Hero() {
 
           <div className="flex items-center gap-4">
             <button
-              onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => {
+                if (window.lenis) {
+                  window.lenis.scrollTo('#projects');
+                } else {
+                  document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
               className="group relative overflow-hidden bg-acid text-ink font-display font-bold text-sm px-8 py-4 transition-all duration-300 hover:scale-105"
               data-hover
             >
@@ -72,7 +78,13 @@ export default function Hero() {
               <div className="absolute inset-0 bg-white scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
             </button>
             <button
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => {
+                if (window.lenis) {
+                  window.lenis.scrollTo('#contact');
+                } else {
+                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
               className="font-mono text-sm text-mist border border-border px-8 py-4 hover:text-paper hover:border-paper/50 transition-all duration-300"
               data-hover
             >

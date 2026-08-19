@@ -37,17 +37,31 @@ export default function Cursor() {
       ring.classList.remove('expanded');
     };
 
-    window.addEventListener('mousemove', onMove);
-    raf.current = requestAnimationFrame(animate);
+    const handleMouseOver = (e) => {
+      if (e.target.closest('a, button, [data-hover]')) {
+        onEnter();
+      }
+    };
 
-    const interactives = document.querySelectorAll('a, button, [data-hover]');
-    interactives.forEach(el => {
-      el.addEventListener('mouseenter', onEnter);
-      el.addEventListener('mouseleave', onLeave);
-    });
+    const handleMouseOut = (e) => {
+      const interactive = e.target.closest('a, button, [data-hover]');
+      if (interactive) {
+        const related = e.relatedTarget;
+        if (!related || !interactive.contains(related)) {
+          onLeave();
+        }
+      }
+    };
+
+    window.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseover', handleMouseOver);
+    document.addEventListener('mouseout', handleMouseOut);
+    raf.current = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseover', handleMouseOver);
+      document.removeEventListener('mouseout', handleMouseOut);
       cancelAnimationFrame(raf.current);
     };
   }, []);

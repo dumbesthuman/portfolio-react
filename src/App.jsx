@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useReveal } from './hooks/useReveal';
 import Cursor from './components/Cursor';
 import Loader from './components/Loader';
 import Navbar from './components/Navbar';
@@ -9,16 +8,37 @@ import About from './components/About';
 import Projects from './components/Projects';
 import Experience from './components/Experience';
 import Contact from './components/Contact';
+import Lenis from 'lenis';
+import 'lenis/dist/lenis.css';
 import './styles/globals.css';
 
 export default function App() {
   const [loaded, setLoaded] = useState(false);
-  useReveal();
 
   useEffect(() => {
-    document.documentElement.style.scrollBehavior = 'smooth';
-
     if (loaded) {
+      // Initialize Lenis smooth scroll
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+        wheelMultiplier: 1,
+        touchMultiplier: 2,
+        infinite: false,
+      });
+
+      window.lenis = lenis;
+
+      let rafId;
+      function raf(time) {
+        lenis.raf(time);
+        rafId = requestAnimationFrame(raf);
+      }
+      rafId = requestAnimationFrame(raf);
+
+      // Section Reveal IntersectionObserver
       const timer = setTimeout(() => {
         const observer = new IntersectionObserver(
           (entries) => {
@@ -31,7 +51,13 @@ export default function App() {
         document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
         return () => observer.disconnect();
       }, 400);
-      return () => clearTimeout(timer);
+
+      return () => {
+        clearTimeout(timer);
+        cancelAnimationFrame(rafId);
+        lenis.destroy();
+        window.lenis = undefined;
+      };
     }
   }, [loaded]);
 
