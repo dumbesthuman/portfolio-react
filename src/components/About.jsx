@@ -23,7 +23,7 @@ export default function About() {
             {/* Image container with overflow hidden so zoom doesn't spill */}
             <div className="relative w-full h-full border border-border overflow-hidden bg-dim">
               <img 
-                src="/profile.jpg" 
+                src="/profile.png"
                 alt="Ritesh Hiremath" 
                 className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 filter contrast-105"
               />
